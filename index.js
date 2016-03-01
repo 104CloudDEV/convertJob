@@ -2,10 +2,10 @@ var colors = require('colors'),
 	AWS = require('aws-sdk');
 
 var awsCredentialsPath = './aws.credentials.json',
-    sqsQueueUrl = 'https://sqs.ap-northeast-1.amazonaws.com/574562031426/104sqsTest',
+    sqsQueueUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/104sqsTest',
     sqs;
 
-AWS.config.loadFromPath(awsCredentialsPath); // Load credentials from local json file
+//AWS.config.loadFromPath(awsCredentialsPath); // Load credentials from local json file
 sqs = new AWS.SQS(); // Instantiate SQS client
 
 function readMessage() {
