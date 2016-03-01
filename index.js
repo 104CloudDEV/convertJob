@@ -6,6 +6,7 @@ var awsCredentialsPath = './aws.credentials.json',
     sqs;
 
 //AWS.config.loadFromPath(awsCredentialsPath); // Load credentials from local json file
+AWS.config.update({region: 'ap-northeast-1'});
 sqs = new AWS.SQS(); // Instantiate SQS client
 
 function readMessage() {
