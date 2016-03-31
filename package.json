@@ -21,6 +21,6 @@
     "grunt-contrib-jshint": "v0.12.0",
     "grunt-contrib-watch": "v0.6.0",
     "colors": "1.1.2",
-    "aws-sdk": "v2.2.35"
+    "aws-sdk": "v2.2.48"
   }
 }
