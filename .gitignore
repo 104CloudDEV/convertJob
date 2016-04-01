@@ -34,3 +34,6 @@ node_modules
 
 # AWS DevKey
 aws.credentials.json
+
+# temp
+/tmp

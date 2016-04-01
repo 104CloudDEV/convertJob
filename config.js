@@ -16,4 +16,13 @@ module.exports = {
 		var region = {region: 'ap-northeast-1'};
 		return region;		
 	},
+	getUserUploadS3: function(){
+		var options = {
+		  hostname  : 's3-ap-northeast-1.amazonaws.com',
+		  port      : 443,
+		  path      : '/e104-doc-api-file-store',
+		  method    : 'GET'
+		};
+		return options;		
+	}
 };
