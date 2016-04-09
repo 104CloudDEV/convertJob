@@ -6,14 +6,14 @@ module.exports = {
                 VisibilityTimeout: 30,      // seconds - how long we want a lock on this job
                 WaitTimeSeconds: 20         // seconds - how long should we wait for a message?
             }
-        return sqsParameter;	
+        return sqsParameter	
 	},
 	getCredentialsPath: function(){
-		var credentialsPath = './aws.credentials.json';
-		return credentialsPath;		
+		var credentialsPath = './aws.credentials.json'
+		return credentialsPath		
 	},
 	getRegion: function(){
-		var region = {region: 'ap-northeast-1'};
+		var region = {region: 'ap-northeast-1'}
 		return region;		
 	},
 	getUserUploadS3: function(){
@@ -22,7 +22,11 @@ module.exports = {
 		  port      : 443,
 		  path      : '/e104-doc-api-file-store',
 		  method    : 'GET'
-		};
-		return options;		
+		}
+		return options
+	},
+	getTempFloderPath: function(){
+		var path = './tmp'
+		return path
 	}
 };

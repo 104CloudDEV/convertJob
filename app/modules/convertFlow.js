@@ -1,19 +1,21 @@
-var s3 = require('./s3'),
-	colors = require('colors')
+var colors = require('colors'),
+	s3 = require('./s3'),
+    convert = require('./convertModules'),
+    config = require('../config'),
+    dir = config.getTempFloderPath()
 
 module.exports = {
-	imgFlow : function(filePath, convertPrem, callback){
-		console.log(filePath)  
-		console.log(convertPrem.toString())
-
-		s3.getFile(filePath, function(err, data){
+	imgFlow : function(s3ObjKey, convertPrem, callback){
+		//console.log(s3ObjKey)  
+		s3.getFile(s3ObjKey, function(err, fileFullName){
 			if(err) callback(err, null)
-			if(data=='sucess'){
+			if(fileFullName){
 				console.log(colors.cyan('get file done'))
 				//do convert
-
-
-				callback(null, 'sucess')
+				convert.resizeImg(fileFullName, convertPrem, 0, function(err, newfileName){
+					console.log(colors.cyan('convert OK'))
+					callback(null, 'sucess')
+				});
 			}
 		})
 	},
