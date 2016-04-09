@@ -36,4 +36,4 @@ node_modules
 aws.credentials.json
 
 # temp
-/tmp
+/app/tmp
