@@ -91,6 +91,7 @@ sqs.listQueues(testCredentialsParams, function(err, data) {
         console.log(colors.cyan('Get local credentials' + config.getCredentialsPath()))
         AWS.config.loadFromPath(config.getCredentialsPath()) // Load credentials from local json file
         sqs = new AWS.SQS()    //Reset instantiate
+        console.log(colors.cyan('wait for queue'))
         _this.readMessage()    //Recursive go~
     }else{
         console.log(colors.cyan('EC2 credentials'))

@@ -7,3 +7,5 @@
  "secretAccessKey": "",
  "region": "ap-northeast-1"
 }
+
+# npm install grunt-npm-install
