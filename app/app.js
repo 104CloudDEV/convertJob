@@ -1,16 +1,11 @@
 var colors = require('colors'),
     AWS = require('aws-sdk'),
+    fs = require('fs'),
     config = require('./config'),
     convertFlow = require('./modules/convertFlow')
 
 var sqsQueueUrl,
-    testCredentialsParams,
     sqs
-
-//Initial ........
-AWS.config.update(config.getRegion())      //sample: {region: 'ap-northeast-1'}
-testCredentialsParams = {QueueNamePrefix: 'docapi'}
-sqs = new AWS.SQS()                        // Instantiate SQS client
 
 var _this = module.exports = {
     readMessage : function(){
@@ -33,7 +28,7 @@ var _this = module.exports = {
                                 case 'gif':
                                     convertFlow.imgFlow(msg.filepath, msg.convertItems[1].body.extra.multiAction, function(err, data) {
                                         if(err) console.log(err, err.stack)    // an error occurred
-                                        else console.log(data);                // successful response
+                                        else console.log(colors.cyan('Job done!'))            // successful response
 
                                         console.log(colors.cyan('wait for queue'))
                                         _this.readMessage()    // Recursive ~~~~
@@ -85,16 +80,16 @@ var _this = module.exports = {
 }
 
 //This is for self test credentials, use EC2 role or local file.
-sqs.listQueues(testCredentialsParams, function(err, data) {
-    if(err){ 
-        console.log(colors.red(err.message)) // an error occurred
-        console.log(colors.cyan('Get local credentials' + config.getCredentialsPath()))
+fs.stat(config.getCredentialsPath(), function(err, stat) {
+    if(err == null) {
         AWS.config.loadFromPath(config.getCredentialsPath()) // Load credentials from local json file
-        sqs = new AWS.SQS()    //Reset instantiate
+        sqs = new AWS.SQS()    // Instantiate SQS client  
         console.log(colors.cyan('wait for queue'))
         _this.readMessage()    //Recursive go~
-    }else{
+    } else {
+        AWS.config.update(config.getRegion())      //sample: {region: 'ap-northeast-1'}
+        sqs = new AWS.SQS()                        // Instantiate SQS client
         console.log(colors.cyan('EC2 credentials'))
         _this.readMessage()   //Recursive go~
-    }     
-})
+    }
+});

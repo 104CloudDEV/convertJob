@@ -1,10 +1,13 @@
 var easy = require('easyimage'),
     config = require('../config'),
+    s3 = require('./s3'),
     dir = config.getTempFloderPath()
 
 
 var _this = module.exports = {
-	resizeImg: function(fileFullName, targetArray, index, callback) {
+	resizeImg: function(s3ObjKey, targetArray, index, callback) {
+		var fileFullName = s3ObjKey.substring(s3ObjKey.lastIndexOf('/')+1, s3ObjKey.length) // s3ObjKey = a1c/63a/9f3/fe361b575c904448abd9d60cac97360611.jpg
+
 		easy.info(dir+'/'+fileFullName).then(
 			function (imginfo) {
 				//console.log(imginfo)
@@ -20,23 +23,32 @@ var _this = module.exports = {
 
 				easy.resize(options).then(
 					function (file) {
-						console.log('convert OK : ' + options.dst)
-						if (index < targetArray.length - 1){
-							_this.resizeImg(fileFullName, targetArray, index + 1, callback)  // Recursive ~~~~
-						}else{
-							callback()
-						}
+						//console.log('convert OK : ' + JSON.stringify(file))
+						console.log('Convert done! \tnew file:' + file.name)
+						var keyPrefix = s3ObjKey.substring(0, s3ObjKey.lastIndexOf('/')+1) 
+						
+						s3.upload(file.path, keyPrefix+file.name, function(err, data){
+							if(err) callback(err, null)
+
+							//console.log(data);
+							if (index < targetArray.length - 1){
+							
+								_this.resizeImg(s3ObjKey, targetArray, index + 1, callback)  // Recursive ~~~~
+							
+							}else{
+								callback(null, 'sucess')
+							}
+						})
+
+						
 					}, function (err) {
-						console.log(err);
-						callback(err);
-						return
+						console.log(err)
+						callback(err, null)
 					}
 				)
-
 			},function (err) {
 				console.log(err)
-				callback(err)
-				return
+				callback(err, null)
 			}
 		)
 	}

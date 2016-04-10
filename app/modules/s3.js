@@ -4,6 +4,8 @@ var AWS = require('aws-sdk'),
     config = require('../config'),
     dir = config.getTempFloderPath()
 
+var s3 
+
 module.exports = {
     getFile : function(s3ObjKey, callback){
         console.log(s3ObjKey)  
@@ -18,7 +20,7 @@ module.exports = {
         options.path = options.path+'/'+s3ObjKey
 
         var req = https.request(options, function(res) {
-            console.log("statusCode: ", res.statusCode)
+            //console.log("statusCode: ", res.statusCode)
             
             //console.log("headers: ", res.headers)
             //res.on('data', function(d) {
@@ -41,8 +43,47 @@ module.exports = {
           callback(e, null)
         })
     },
-    mediaFlow : function(){
+
+
+    upload : function(source, targetKey, callback){
+        
+        fs.readFile(source, function (err, data) {
+            if (err) callback(err, null)
+
+            var params = {
+                Bucket: config.getConvertedS3bucket(), 
+                Key: targetKey, 
+                Body: data,
+                ACL: 'public-read'
+            };
+            //console.log('params:' + JSON.stringify(params));
+            
+            s3.upload(params, function(err, data) {
+                    if(err) callback(err, null)
+                    console.log(data);
+                }).on('httpUploadProgress', function(evt) {
+                    //console.log(evt);   // upload progress
+                }).send(function(err, data) {
+                    if(err)callback(err, null)
+                    
+                    console.log("Upload done! S\tETag:" + data.ETag)
+                    callback(null, data);
+            })
+        })
     },
     audioFlow : function(){
     }
 }
+
+//This is for self test credentials, use EC2 role or local file.
+fs.stat(config.getCredentialsPath(), function(err, stat) {
+    if(err == null) {
+        AWS.config.loadFromPath(config.getCredentialsPath()) // Load credentials from local json file
+        s3 = new AWS.S3()  // Instantiate s3 client  
+    } else {
+        AWS.config.update(config.getRegion())      //sample: {region: 'ap-northeast-1'}
+        s3 = new AWS.S3()   // Instantiate s3 client  
+    }
+});
+
+

@@ -28,5 +28,9 @@ module.exports = {
 	getTempFloderPath: function(){
 		var path = './tmp'
 		return path
+	},
+	getConvertedS3bucket: function(){
+		var bucket = 'e104-doc-api-file-store-converted'
+		return bucket
 	}
 };
