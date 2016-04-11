@@ -1,4 +1,5 @@
 var easy = require('easyimage'),
+	ffmpeg = require('fluent-ffmpeg'),
     config = require('../config'),
     s3 = require('./s3'),
     dir = config.getTempFloderPath()
@@ -51,5 +52,43 @@ var _this = module.exports = {
 				callback(err, null)
 			}
 		)
+	},
+	screenshots: function(s3ObjKey, targetArray, callback) {
+		var fileFullName = s3ObjKey.substring(s3ObjKey.lastIndexOf('/')+1, s3ObjKey.length) // s3ObjKey = a1c/63a/9f3/fe361b575c904448abd9d60cac97360611.jpg
+		    fileName = fileFullName.substring(0, fileFullName.indexOf('.'))
+
+		//console.log(dir+'/'+fileFullName)    
+		ffmpeg(dir+'/'+fileFullName)
+			.on('end', function() {
+    			console.log('screenshots were saved')
+    			var keyPrefix = s3ObjKey.substring(0, s3ObjKey.lastIndexOf('/')+1) 
+						
+				s3.upload(dir+'/'+fileName + '.png', keyPrefix+'/'+fileName + '.png', function(err, data){
+					if(err) callback(err, null)
+					
+					callback(null, 'sucess')
+					
+				})
+ 			})
+ 			.on('error', function(err) {
+    			console.log('an error happened: ' + err.message)
+    			callback(err, null)
+  			})
+			.screenshots({
+			    timestamps: [3],
+			    filename: fileName + '.png',
+			    folder: dir,
+			    size: '320x240'
+			})
+
+
+	},
+	videoConvert: function(s3ObjKey, targetArray, callback) {
+		//String command = "ffmpeg -y -i " + src + " -strict experimental -c:v libx264 -b:v 800k -r 29.97 -maxrate 800k -c:a aac -ar 44100 -bufsize 2048k -g 15 -movflags faststart -profile:v baseline " + dest ;
+		//command = "ffmpeg -y -i " + filePath + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf scale=trunc(oh*a/2)*2:" + resolution + " -c:a aac -ar 44100 -threads 0 -movflags +faststart " + newFilePathStr;
+		var fileFullName = s3ObjKey.substring(s3ObjKey.lastIndexOf('/')+1, s3ObjKey.length) // s3ObjKey = a1c/63a/9f3/fe361b575c904448abd9d60cac97360611.jpg
+		    fileName = fileFullName.substring(0, fileFullName.indexOf('.'))
+
+
 	}
 }

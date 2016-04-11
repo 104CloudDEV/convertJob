@@ -24,7 +24,20 @@ var _this = module.exports = {
 			}
 		})
 	},
-	mediaFlow : function(){
+	mediaFlow : function(s3ObjKey, convertPrem, callback){
+		s3.getFile(s3ObjKey, function(err, fileFullName){
+			if(err) callback(err, null)
+			if(fileFullName){
+				console.log(colors.cyan('get file done'))
+				
+				//get first frame
+				convert.screenshots(s3ObjKey, convertPrem , function(err, newfileName){
+					//convert
+					console.log(colors.cyan('screenshots done'))
+				})
+
+			}
+		})
 	},
 	audioFlow : function(){
 	},

@@ -66,7 +66,7 @@ module.exports = {
                 }).send(function(err, data) {
                     if(err)callback(err, null)
                     
-                    console.log("Upload done! S\tETag:" + data.ETag)
+                    console.log("Upload done!\tETag:" + data.ETag)
                     callback(null, data);
             })
         })

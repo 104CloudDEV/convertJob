@@ -35,9 +35,15 @@ var _this = module.exports = {
                                     }) 
                                     break
                                 case 'avi':
-                                    convertFlow.mediaFlow()
-                                    break
+                                case 'wmv':
+                                    convertFlow.mediaFlow(msg.filepath, null, function(err, data) {
+                                        if(err) console.log(err, err.stack)    // an error occurred
+                                        else console.log(colors.cyan('Job done!'))            // successful response
 
+                                        console.log(colors.cyan('wait for queue'))
+                                        _this.readMessage()    // Recursive ~~~~
+                                    }) 
+                                    break
                                 case 'mp3':
                                     convertFlow.audioFlow()
                                     break
