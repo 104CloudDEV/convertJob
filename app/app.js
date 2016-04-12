@@ -36,6 +36,7 @@ var _this = module.exports = {
                                     break
                                 case 'avi':
                                 case 'wmv':
+                                case 'mov':
                                     convertFlow.mediaFlow(msg.filepath, null, function(err, data) {
                                         if(err) console.log(err, err.stack)    // an error occurred
                                         else console.log(colors.cyan('Job done!'))            // successful response

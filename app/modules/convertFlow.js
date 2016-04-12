@@ -34,6 +34,14 @@ var _this = module.exports = {
 				convert.screenshots(s3ObjKey, convertPrem , function(err, newfileName){
 					//convert
 					console.log(colors.cyan('screenshots done'))
+
+					convert.videoConvert(s3ObjKey, convertPrem , function(err, newfileName){
+						if(err) callback(err, null)
+
+						callback(null, 'sucess')
+
+					})
+
 				})
 
 			}

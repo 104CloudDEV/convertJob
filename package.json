@@ -23,6 +23,7 @@
     "colors": "1.1.2",
     "aws-sdk": "v2.2.48",
     "easyimage" : "2.1.0",
-    "fluent-ffmpeg" : "*"
+    "ffprobe-static" : "*",
+    "ffprobe" : "*"
   }
 }
