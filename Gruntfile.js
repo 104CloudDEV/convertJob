@@ -1,12 +1,17 @@
 module.exports = function(grunt) {
 
+  // Project configuration.
   grunt.initConfig({
+    // This line makes your node configurations available for use
+    pkg: grunt.file.readJSON('package.json'),
     jshint: {
-      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+      files: ['Gruntfile.js', 'app/**/*.js', 'test/**/*.js'],
       options: {
-        globals: {
-          jQuery: true
-        }
+          node: true,
+          curly: false,
+          eqnull: true,
+          asi: true,
+          loopfunc:true
       }
     },
     watch: {
@@ -15,9 +20,10 @@ module.exports = function(grunt) {
     }
   });
 
+  //grunt.loadNpmTasks('grunt-npm-install');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['npm-install', 'jshint']);
 
 };
