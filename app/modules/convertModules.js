@@ -137,14 +137,14 @@ var _this = module.exports = {
 			var newFileName =  fileName+'_v1_'+resolution+'p.mp4'
 			switch (rotation) {
 				case '90':
-					ffmpegCommand = "ffmpeg -y -i " +dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf transpose=1[out];[out]scale=trunc(oh*a/2)*2:" + resolution + " -metadata:s:v:0 rotate=0 -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
+					ffmpegCommand = "ffmpeg -y -i " +dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf \"transpose=1[out];[out]scale=trunc(oh*a/2)*2:" + resolution + "\" -metadata:s:v:0 rotate=0 -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
 					break;
 				case '-90':
 				case '270':
-					ffmpegCommand = "ffmpeg -y -i " +dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf transpose=2[out];[out]scale=trunc(oh*a/2)*2:" + resolution + " -metadata:s:v:0 rotate=0 -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
+					ffmpegCommand = "ffmpeg -y -i " +dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf \"transpose=2[out];[out]scale=trunc(oh*a/2)*2:" + resolution + "\" -metadata:s:v:0 rotate=0 -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
 					break;
 				default:
-					ffmpegCommand = "ffmpeg -y -i "+dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf scale=trunc(oh*a/2)*2:" + resolution + " -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
+					ffmpegCommand = "ffmpeg -y -i "+dir+'/'+fileFullName + " -strict experimental -c:v libx264 -profile:v high -level " + level + " -preset slow -crf 23 -pix_fmt yuv420p -vf \"scale=trunc(oh*a/2)*2:" + resolution + "\" -c:a aac -ar 44100 -threads 0 -movflags +faststart " + dir + '/' + newFileName
 			}
 
 			console.log('ffmpegCommand: ' + ffmpegCommand);
