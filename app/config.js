@@ -30,6 +30,10 @@ module.exports = {
 		var path = './tmp'
 		return path
 	},
+	getUserUploadS3bucket: function(){
+		var bucket = 'docapi-dev-origin'
+		return bucket
+	},
 	getConvertedS3bucket: function(){
 		var bucket = 'docapi-dev-variant'
 		return bucket
