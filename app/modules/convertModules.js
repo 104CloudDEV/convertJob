@@ -71,7 +71,8 @@ var _this = module.exports = {
 				console.log('exec error: ' + error);
 				callback(error, null)
 			}else{
-				s3.upload(dir+'/'+fileName + '.jpg', keyPrefix+'/'+fileName + '.jpg', function(err, data){
+				console.log(keyPrefix+'/'+fileName + '.jpg');
+				s3.upload(dir+'/'+fileName + '.jpg', keyPrefix+fileName + '.jpg', function(err, data){
 					if(err) callback(err, null)
 					
 					callback(null, 'sucess')
@@ -154,7 +155,7 @@ var _this = module.exports = {
 				console.log('exec error: ' + error);
 				callback(error, null)
 			}else{
-				s3.upload(dir+'/'+newFileName, keyPrefix+'/'+newFileName, function(err, data){
+				s3.upload(dir+'/'+newFileName, keyPrefix+newFileName, function(err, data){
 					if(err) callback(err, null)
 					
 					callback(null, 'sucess')
