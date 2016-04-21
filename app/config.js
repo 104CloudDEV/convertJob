@@ -21,7 +21,7 @@ module.exports = {
 		var options = {
 		  hostname  : 's3-ap-northeast-1.amazonaws.com',
 		  port      : 443,
-		  path      : '/e104-doc-api-file-store',
+		  path      : '/docapi-dev-origin',
 		  method    : 'GET'
 		}
 		return options
@@ -31,7 +31,7 @@ module.exports = {
 		return path
 	},
 	getConvertedS3bucket: function(){
-		var bucket = 'e104-doc-api-file-store-converted'
+		var bucket = 'docapi-dev-variant'
 		return bucket
 	}
 };
