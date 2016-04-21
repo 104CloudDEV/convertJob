@@ -27,6 +27,7 @@ var _this = module.exports = {
 	mediaFlow : function(s3ObjKey, convertPrem, callback){
 		s3.getFile(s3ObjKey, function(err, fileFullName){
 			if(err) callback(err, null)
+			
 			if(fileFullName){
 				console.log(colors.cyan('get file done'))
 				
@@ -44,6 +45,8 @@ var _this = module.exports = {
 
 				})
 
+			}else{
+				callback("Get file fail", null)
 			}
 		})
 	},
