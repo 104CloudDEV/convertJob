@@ -2,7 +2,7 @@ module.exports = {
 	getSQSParameter :  function(){
 		var sqsParameter = {
                 //QueueUrl: 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-jobs-linux-hi',
-                QueueUrl: 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-jobs-linux-low',
+                QueueUrl: 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxHighPriorityQueue',
                 MaxNumberOfMessages: 1,     // how many messages do we wanna retrieve?
                 VisibilityTimeout: 30,      // seconds - how long we want a lock on this job
                 WaitTimeSeconds: 20         // seconds - how long should we wait for a message?
@@ -10,7 +10,7 @@ module.exports = {
         return sqsParameter	
 	},
 	getCredentialsPath: function(){
-		var credentialsPath = './aws.credentials.json'
+		var credentialsPath = './app/aws.credentials.json'
 		return credentialsPath		
 	},
 	getRegion: function(){
