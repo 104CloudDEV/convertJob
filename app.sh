@@ -14,7 +14,7 @@ case "$1" in
 		then
 			echo "The job is running"
 		else
-			node ./app/app.js
+			/opt/node/bin/node ./app/app.js
 			echo "The job start"
 		fi
 		;;
@@ -24,5 +24,6 @@ case "$1" in
 			echo "The job will stop when job done"
 		else
 			touch ./app/stop
+			echo "The job will stop when job done"
 		fi
 esac
