@@ -21,13 +21,13 @@ var _this = module.exports = {
                         // Now this is where you'd do something with this message
                         var msg = JSON.parse(data.Messages[msgIndex].Body)
                         //console.log(data.Messages)
-                        if(msg.filepath){
-                            var mediaType = msg.filepath.substring(msg.filepath.indexOf('.')+1 , msg.filepath.length).toLowerCase()
+                        if(msg.filePath){
+                            var mediaType = msg.filePath.substring(msg.filePath.indexOf('.')+1 , msg.filePath.length).toLowerCase()
                             switch (mediaType){
                                 case 'jpg':
                                 case 'png':
                                 case 'gif':
-                                    convertFlow.imgFlow(msg.filepath, msg.convertItems[1].body.extra.multiAction, function(err, result) {
+                                    convertFlow.imgFlow(msg.filePath, msg.convertItems[1].body.extra.multiAction, function(err, result) {
                                         if(err){  // an error occurred
                                             console.log(err, err.stack)
                                         } else{
@@ -44,7 +44,7 @@ var _this = module.exports = {
                                 case 'avi':
                                 case 'wmv':
                                 case 'mov':
-                                    convertFlow.mediaFlow(msg.filepath, null, function(err, result) {
+                                    convertFlow.mediaFlow(msg.filePath, null, function(err, result) {
                                         if(err){  // an error occurred
                                             console.log(err, err.stack)
                                         } else{
