@@ -10,6 +10,6 @@ cd $Node_Base
 
 if [ -e $PID_FILE ];then
 
-	PATH=$PATH:$Node_Base/bin ; export FOREVER_ROOT=$Node_Log ; $Node_Base/bin/forever stop `cat $PID_FILE`
+	export PATH=$PATH:$Node_Base/bin:/opt/ffmpeg/bin ; export FOREVER_ROOT=$Node_Log ; $Node_Base/bin/forever stop `cat $PID_FILE`
 
 fi

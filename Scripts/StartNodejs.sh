@@ -17,7 +17,7 @@ cd $Node_Base
 
 if [ -e $PID_FILE ];then
 
-	PATH=$PATH:$Node_Base/bin ; export FOREVER_ROOT=$Node_Log ; $Node_Base/bin/forever stop `cat $PID_FILE`
+	export PATH=$PATH:$Node_Base/bin:/opt/ffmpeg/bin ; export FOREVER_ROOT=$Node_Log ; $Node_Base/bin/forever stop `cat $PID_FILE`
 
 	sleep 1
 
@@ -26,7 +26,7 @@ fi
 while [ ! -e $PID_FILE ]
 do
 
-	PATH=$PATH:$Node_Base/bin ; export FOREVER_ROOT=$Node_Log ; export AutoScalingGroup=$AutoScalingGroup ; $Node_Base/bin/forever start -o $Node_Log/forever.log -e $Node_Log/forever_err.log --pidFile $PID_FILE -a $Node_Root/$NoteApp
+	export PATH=$PATH:$Node_Base/bin:/opt/ffmpeg/bin ; export FOREVER_ROOT=$Node_Log ; export AutoScalingGroup=$AutoScalingGroup ; $Node_Base/bin/forever start -o $Node_Log/forever.log -e $Node_Log/forever_err.log --pidFile $PID_FILE -a $Node_Root/$NoteApp
 
 	sleep 1
 done
