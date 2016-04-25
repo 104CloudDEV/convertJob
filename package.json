@@ -2,9 +2,11 @@
   "name": "convertJob",
   "version": "0.0.0",
   "description": "接queue的轉檔程式，串接AWS sis與S3",
-  "main": "index.js",
+  "main": "./app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "/opt/node/bin/node ./app/app.js",
+    "stop" : "pkill --signal SIGINT convertJob"
   },
   "repository": {
     "type": "git",

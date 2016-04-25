@@ -1,3 +1,5 @@
+process.title = 'convertJob'
+
 var colors = require('colors'),
     AWS = require('aws-sdk'),
     fs = require('fs'),
