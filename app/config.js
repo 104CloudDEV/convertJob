@@ -1,12 +1,34 @@
+var colors = require('colors')
+
 module.exports = {
 	getSQSParameter :  function(){
+		var SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxHighPriorityQueue'
+
+		console.log(colors.cyan('process.env["AutoScalingGroup"] = ' + process.env["AutoScalingGroup"]))
+
+		switch(process.env["AutoScalingGroup"]){
+			case 'AutoScalingGroup_DocConvert_Img_LAB_OnDemand':
+			case 'AutoScalingGroup_DocConvert_Img_LAB_Spot':
+				SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxHighPriorityQueue'
+				break
+
+			case 'AutoScalingGroup_DocConvert_Stream_OnDemand':
+			case 'AutoScalingGroup_DocConvert_Stream_Spot':
+				SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxLowPriorityQueue'
+				break
+
+			default:
+				SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxLowPriorityQueue'
+			}
+
 		var sqsParameter = {
                 //QueueUrl: 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-jobs-linux-hi',
-                QueueUrl: 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxHighPriorityQueue',
+                QueueUrl: SQSUrl,
                 MaxNumberOfMessages: 1,     // how many messages do we wanna retrieve?
                 VisibilityTimeout: 30,      // seconds - how long we want a lock on this job
                 WaitTimeSeconds: 20         // seconds - how long should we wait for a message?
-            }
+        }
+
         return sqsParameter	
 	},
 	getCredentialsPath: function(){

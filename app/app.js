@@ -20,16 +20,22 @@ var _this = module.exports = {
                     for (var msgIndex in data.Messages){
                         // Now this is where you'd do something with this message
                         var msg = JSON.parse(data.Messages[msgIndex].Body)
-                        //console.log(msg)
+                        //console.log(data.Messages)
                         if(msg.filepath){
                             var mediaType = msg.filepath.substring(msg.filepath.indexOf('.')+1 , msg.filepath.length).toLowerCase()
                             switch (mediaType){
                                 case 'jpg':
                                 case 'png':
                                 case 'gif':
-                                    convertFlow.imgFlow(msg.filepath, msg.convertItems[1].body.extra.multiAction, function(err, data) {
-                                        if(err) console.log(err, err.stack)    // an error occurred
-                                        else console.log(colors.cyan('Job done!'))            // successful response
+                                    convertFlow.imgFlow(msg.filepath, msg.convertItems[1].body.extra.multiAction, function(err, result) {
+                                        if(err){  // an error occurred
+                                            console.log(err, err.stack)
+                                        } else{
+                                            console.log(colors.cyan('Job done!'))   // successful response
+
+                                            //Clean up after yourself... delete this message from the queue, so it's not executed again
+                                            _this.removeFromQueue(data.Messages[msgIndex].ReceiptHandle);  // We'll do this in a second
+                                        }
 
                                         console.log(colors.cyan('wait for queue'))
                                         _this.readMessage()    // Recursive ~~~~
@@ -38,9 +44,14 @@ var _this = module.exports = {
                                 case 'avi':
                                 case 'wmv':
                                 case 'mov':
-                                    convertFlow.mediaFlow(msg.filepath, null, function(err, data) {
-                                        if(err) console.log(err, err.stack)    // an error occurred
-                                        else console.log(colors.cyan('Job done!'))            // successful response
+                                    convertFlow.mediaFlow(msg.filepath, null, function(err, result) {
+                                        if(err){  // an error occurred
+                                            console.log(err, err.stack)
+                                        } else{
+                                            console.log(colors.cyan('Job done!'))   // successful response
+                                            //Clean up after yourself... delete this message from the queue, so it's not executed again
+                                            _this.removeFromQueue(data.Messages[msgIndex].ReceiptHandle);  // We'll do this in a second
+                                        }
 
                                         console.log(colors.cyan('wait for queue'))
                                         _this.readMessage()    // Recursive ~~~~
@@ -77,6 +88,8 @@ var _this = module.exports = {
     },
 
     removeFromQueue : function(ReceiptHandle) {
+        console.log(ReceiptHandle)
+
         sqs.deleteMessage({
                 QueueUrl: config.getSQSParameter().QueueUrl,
                 ReceiptHandle: ReceiptHandle, 
