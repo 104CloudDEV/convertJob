@@ -1,0 +1,43 @@
+version: 0.0
+os: linux
+files:
+  - source: Content
+    destination: /opt/node/root
+#permissions:
+#  - object: /opt/tomcat/default/webapps/ROOT
+#    pattern: "*"
+#    owner: nobody
+#    group: nobody
+#    mode: 755
+#    type:
+#      - directory
+#  - object: /opt/tomcat/default/webapps/ROOT
+#    pattern: "*"
+#    owner: nobody
+#    group: nobody
+#    mode: 644
+#    type:
+#      - file
+hooks:
+  ApplicationStop:
+    - location: Scripts/EC2_Enter_Standby.sh
+      timeout: 60
+      runas: root
+  BeforeInstall:
+    - location: Scripts/install_nodejs.sh
+      timeout: 60
+      runas: root
+    - location: Scripts/StopNodejs.sh
+      timeout: 60
+      runas: root
+    - location: Scripts/EarseOldDeploy.sh
+      timeout: 60
+      runas: root
+  ApplicationStart:
+    - location: Scripts/StartNodejs.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: Scripts/EC2_Exit_Standby.sh
+      timeout: 60
+      runas: root
