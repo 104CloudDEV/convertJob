@@ -27,7 +27,7 @@ module.exports = {
 		return options
 	},
 	getTempFloderPath: function(){
-		var path = './tmp'
+		var path = __dirname +'/tmp'
 		return path
 	},
 	getUserUploadS3bucket: function(){
