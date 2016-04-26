@@ -20,26 +20,35 @@ var _this = module.exports = {
                     for (var msgIndex in data.Messages){
                         // Now this is where you'd do something with this message
                         var msg = JSON.parse(data.Messages[msgIndex].Body)
-                        //console.log(data.Messages)
+                        console.log(data.Messages)
                         if(msg.filePath){
                             var mediaType = msg.filePath.substring(msg.filePath.indexOf('.')+1 , msg.filePath.length).toLowerCase()
                             switch (mediaType){
                                 case 'jpg':
                                 case 'png':
                                 case 'gif':
-                                    convertFlow.imgFlow(msg.filePath, msg.convertItems[1].body.extra.multiAction, function(err, result) {
-                                        if(err){  // an error occurred
-                                            console.log(err, err.stack)
-                                        } else{
-                                            console.log(colors.cyan('Job done!'))   // successful response
-
-                                            //Clean up after yourself... delete this message from the queue, so it's not executed again
-                                            _this.removeFromQueue(data.Messages[msgIndex].ReceiptHandle);  // We'll do this in a second
-                                        }
-
+                                    if(!msg.convertItems[0].body){
+                                        console.log(colors.red("sqs formate error"))
                                         console.log(colors.cyan('wait for queue'))
                                         _this.readMessage()    // Recursive ~~~~
-                                    }) 
+                                    
+                                    }else{
+
+                                        convertFlow.imgFlow(msg.filePath, msg.convertItems[0].body.extra.multiAction, function(err, result) {
+                                            if(err){  // an error occurred
+                                                console.log(err, err.stack)
+                                            } else{
+                                                console.log(colors.cyan('Job done!'))   // successful response
+
+                                                //Clean up after yourself... delete this message from the queue, so it's not executed again
+                                                _this.removeFromQueue(data.Messages[msgIndex].ReceiptHandle);  // We'll do this in a second
+                                            }
+
+                                            console.log(colors.cyan('wait for queue'))
+                                            _this.readMessage()    // Recursive ~~~~
+                                        }) 
+
+                                    }
                                     break
                                 case 'avi':
                                 case 'wmv':
@@ -88,8 +97,7 @@ var _this = module.exports = {
     },
 
     removeFromQueue : function(ReceiptHandle) {
-        console.log(ReceiptHandle)
-
+        //console.log(ReceiptHandle)
         sqs.deleteMessage({
                 QueueUrl: config.getSQSParameter().QueueUrl,
                 ReceiptHandle: ReceiptHandle, 
