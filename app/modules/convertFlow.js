@@ -50,7 +50,23 @@ var _this = module.exports = {
 			}
 		})
 	},
-	audioFlow : function(){
+	audioFlow : function(s3ObjKey, callback){
+		s3.getFile(s3ObjKey, function(err, fileFullName){
+			if(err) callback(err, null)
+			
+			if(fileFullName){
+				console.log(colors.cyan('get file done'))
+				
+				convert.audioConvert(s3ObjKey, function(err, newfileName){
+					if(err) callback(err, null)
+
+					callback(null, 'sucess')
+				})
+
+			}else{
+				callback("Get file fail", null)
+			}
+		})
 	},
 	deleteFolderRecursive: function(path, callback){
 		if(fs.existsSync(path)) {

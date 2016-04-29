@@ -18,7 +18,7 @@ module.exports = {
 				break
 
 			default:
-				SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxHighPriorityQueue'
+				SQSUrl = 'https://sqs.ap-northeast-1.amazonaws.com/838559313065/docapi-dev-LinuxLowPriorityQueue'
 			}
 
 		var sqsParameter = {

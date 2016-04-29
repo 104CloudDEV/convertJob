@@ -80,35 +80,6 @@ var _this = module.exports = {
 				})
 			}
 		})
-
-
-		//console.log(dir+'/'+fileFullName)    
-		/*
-		ffmpeg(dir+'/'+fileFullName)
-			.on('end', function() {
-    			console.log('screenshots were saved')
-    			var keyPrefix = s3ObjKey.substring(0, s3ObjKey.lastIndexOf('/')+1) 
-						
-				s3.upload(dir+'/'+fileName + '.png', keyPrefix+'/'+fileName + '.png', function(err, data){
-					if(err) callback(err, null)
-					
-					callback(null, 'sucess')
-					
-				})
- 			})
- 			.on('error', function(err) {
-    			console.log('an error happened: ' + err.message)
-    			callback(err, null)
-  			})
-			.screenshots({
-			    timestamps: [3],
-			    filename: fileName + '.png',
-			    folder: dir,
-			    size: '320x240'
-			})
-		*/
-
-
 	},
 	videoConvert: function(s3ObjKey, targetArray, callback) {
 		//String command = "ffmpeg -y -i " + src + " -strict experimental -c:v libx264 -b:v 800k -r 29.97 -maxrate 800k -c:a aac -ar 44100 -bufsize 2048k -g 15 -movflags faststart -profile:v baseline " + dest ;
@@ -149,8 +120,33 @@ var _this = module.exports = {
 
 			console.log('ffmpegCommand: ' + ffmpegCommand);
 			exec(ffmpegCommand, function (error, stdout, stderr) {
-  			//console.log('stdout: ' + stdout);
-  			//console.log('stderr: ' + stderr);
+	  			//console.log('stdout: ' + stdout);
+	  			//console.log('stderr: ' + stderr);
+				if (error !== null) {
+					console.log('exec error: ' + error);
+					callback(error, null)
+				}else{
+					s3.upload(dir+'/'+newFileName, keyPrefix+newFileName, function(err, data){
+						if(err) callback(err, null)
+						
+						callback(null, 'sucess')
+						
+					})
+				}
+			})
+		})
+	},
+	audioConvert: function(s3ObjKey, callback) {
+		var fileFullName = s3ObjKey.substring(s3ObjKey.lastIndexOf('/')+1, s3ObjKey.length), // s3ObjKey = a1c/63a/9f3/fe361b575c904448abd9d60cac97360611.jpg
+		    fileName = fileFullName.substring(0, fileFullName.indexOf('.')),
+		    keyPrefix = s3ObjKey.substring(0, s3ObjKey.lastIndexOf('/')+1),
+		    newFileName =  fileName+'_v1_128k.m4a',
+		    ffmpegCommand		
+
+		ffmpegCommand = "ffmpeg -y -threads 0 -i " +dir+'/'+fileFullName + " -vn -c:a aac -strict experimental -b:a 128k -ar 44100 -movflags faststart " + dir + '/' + newFileName
+		
+		console.log('ffmpegCommand: ' + ffmpegCommand);
+		exec(ffmpegCommand, function (error, stdout, stderr) {
 			if (error !== null) {
 				console.log('exec error: ' + error);
 				callback(error, null)
@@ -162,17 +158,6 @@ var _this = module.exports = {
 					
 				})
 			}
-		})
-
-
-
-
-
-
-
-
-
-
 		})
 	}
 }
