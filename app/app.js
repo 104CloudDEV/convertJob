@@ -34,7 +34,6 @@ var _this = module.exports = {
                     }else{
                         msg = JSON.parse(msg)
                     }
-
                     
                     if(msg.filePath){
                         var mediaType = msg.filePath.substring(msg.filePath.indexOf('.')+1 , msg.filePath.length).toLowerCase()
@@ -82,7 +81,18 @@ var _this = module.exports = {
                                 }) 
                                 break
                             case 'mp3':
-                                convertFlow.audioFlow()
+                                convertFlow.audioFlow(msg.filePath, function(err, result) {
+                                    if(err){  // an error occurred
+                                        console.log(err, err.stack)
+                                    } else{
+                                        console.log(colors.cyan('Job done!'))   // successful response
+                                        //Clean up after yourself... delete this message from the queue, so it's not executed again
+                                        _this.removeFromQueue(data.Messages[msgIndex].ReceiptHandle);  // We'll do this in a second
+                                    }
+
+                                    console.log(colors.cyan('wait for queue'))
+                                    _this.readMessage()    // Recursive ~~~~
+                                }) 
                                 break
                             default:
                                 console.log(colors.red("unsupport media Type"))
