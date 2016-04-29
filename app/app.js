@@ -35,12 +35,15 @@ var _this = module.exports = {
                         msg = JSON.parse(msg)
                     }
                     
-                    if(msg.filePath){
+                    if(msg.filePath && msg.contentType){
                         var mediaType = msg.filePath.substring(msg.filePath.indexOf('.')+1 , msg.filePath.length).toLowerCase()
-                        switch (mediaType){
-                            case 'jpg':
-                            case 'png':
-                            case 'gif':
+                        
+                        //1: Image。送至 Linux::HighPriorityQueue
+                        //2: document   包含 MS Office 與 PDF 格式；Office -> Windows，PDF -> Windows ，詳細流程待確認，目前為 Office -> PDF -> Image。(所有文件轉檔都是由Windows jobs接手處裡)
+                        //3: Video  送至 Linux::LowPriorityQueue，Worker 應先取出首 frame、上傳、再對影片內容轉檔。要注意 Task 處理時限，以免被誤認為執行失敗。
+                        //4: Audio  Do nothing ?
+                        switch (msg.contentType){
+                            case 1:
                                 if(!msg.convertItems[0].body){
                                     console.log(colors.red("sqs formate no body"))
                                     console.log(colors.cyan('wait for queue'))
@@ -64,9 +67,7 @@ var _this = module.exports = {
 
                                 }
                                 break
-                            case 'avi':
-                            case 'wmv':
-                            case 'mov':
+                            case 3:
                                 convertFlow.mediaFlow(msg.filePath, null, function(err, result) {
                                     if(err){  // an error occurred
                                         console.log(err, err.stack)
@@ -80,7 +81,7 @@ var _this = module.exports = {
                                     _this.readMessage()    // Recursive ~~~~
                                 }) 
                                 break
-                            case 'mp3':
+                            case 4:
                                 convertFlow.audioFlow(msg.filePath, function(err, result) {
                                     if(err){  // an error occurred
                                         console.log(err, err.stack)
